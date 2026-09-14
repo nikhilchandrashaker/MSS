@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mario Super Sluggers → Real Baseball: Methodology</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --field:#123B2E;
+    --field-dark:#0C2921;
+    --chalk:#F1EEE2;
+    --chalk-dim:#C9CCC0;
+    --clay:#B5451B;
+    --clay-bright:#D8582A;
+    --gold:#E3A93E;
+    --teal:#3E7C74;
+    --line: rgba(241,238,226,0.16);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--field);
+    color:var(--chalk);
+    font-family:'Work Sans', -apple-system, 'Segoe UI', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+
+  ::selection{ background:var(--gold); color:var(--field-dark); }
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    color:var(--chalk);
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 56px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 55px, var(--line) 55px 56px);
+    opacity:0.5;
+    pointer-events:none;
+  }
+  .eyebrow-line{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:26px;
+    color:var(--chalk-dim);
+    font-size:13px;
+  }
+  .eyebrow-line .dot{
+    width:8px;height:8px;border-radius:50%;background:var(--clay-bright);
+    flex:none;
+  }
+  .hero h1{
+    font-size:44px;
+    line-height:1.08;
+    margin:0 0 20px;
+    max-width:600px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--gold);
+  }
+  .hero p.lede{
+    font-size:18px;
+    max-width:520px;
+    color:var(--chalk-dim);
+    margin:0 0 36px;
+  }
+  .boxscore{
+    display:flex;
+    gap:0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .boxscore div{
+    flex:1;
+    padding:18px 0;
+    border-right:1px solid var(--line);
+  }
+  .boxscore div:last-child{ border-right:none; }
+  .boxscore .num{
+    font-family:'Fraunces', serif;
+    font-size:32px;
+    font-weight:600;
+    color:var(--gold);
+    font-variant-numeric: tabular-nums;
+    display:block;
+  }
+  .boxscore .lbl{
+    font-size:12.5px;
+    color:var(--chalk-dim);
+    margin-top:2px;
+    display:block;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{
+    padding:52px 0;
+    border-bottom:1px solid var(--line);
+  }
+  section:last-of-type{ border-bottom:none; }
+  .tag{
+    font-size:13px;
+    color:var(--teal);
+    font-weight:600;
+    margin-bottom:10px;
+    display:block;
+  }
+  h2{
+    font-size:26px;
+    margin:0 0 18px;
+  }
+  h3{
+    font-size:17px;
+    font-weight:600;
+    margin:28px 0 10px;
+    color:var(--gold);
+  }
+  p{ margin:0 0 16px; max-width:640px; }
+  p.dim{ color:var(--chalk-dim); }
+  a{ color:var(--gold); }
+  ul, ol{ padding-left:20px; margin:0 0 16px; }
+  li{ margin-bottom:8px; max-width:600px; }
+
+  code, .formula{
+    font-family: 'Work Sans', monospace;
+    background: rgba(241,238,226,0.06);
+    border:1px solid var(--line);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:0.92em;
+  }
+
+  /* ---------- WEIGHT BARS ---------- */
+  .posrow{
+    display:grid;
+    grid-template-columns: 46px 1fr 210px;
+    align-items:center;
+    gap:16px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .posrow:last-child{ border-bottom:none; }
+  .posrow .pos{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:17px;
+    color:var(--chalk);
+  }
+  .bar{
+    display:flex;
+    height:20px;
+    width:100%;
+    border-radius:3px;
+    overflow:hidden;
+    background:rgba(0,0,0,0.25);
+  }
+  .bar span{ height:100%; }
+  .seg-bat{ background:var(--clay-bright); }
+  .seg-field{ background:var(--teal); }
+  .seg-run{ background:var(--gold); }
+  .posrow .legend{
+    font-size:12.5px;
+    color:var(--chalk-dim);
+    white-space:nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .keyrow{
+    display:flex;
+    gap:22px;
+    margin:14px 0 26px;
+    font-size:12.5px;
+    color:var(--chalk-dim);
+  }
+  .keyrow span{ display:flex; align-items:center; gap:6px; }
+  .swatch{ width:10px; height:10px; border-radius:2px; display:inline-block; }
+
+  /* ---------- BATTERY (P/C) ---------- */
+  .battery{
+    display:flex;
+    gap:24px;
+    margin-bottom:26px;
+  }
+  .battery .card{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+  }
+  .battery .card .pos{
+    font-family:'Fraunces', serif;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:6px;
+    display:block;
+  }
+
+  /* ---------- SPECTRUM DIAGRAM ---------- */
+  .spectrum{
+    position:relative;
+    margin:28px 0 18px;
+    padding-top:10px;
+  }
+  .spectrum-track{
+    height:3px;
+    background:linear-gradient(90deg, var(--clay-bright), var(--teal) 50%, var(--gold));
+    border-radius:2px;
+    position:relative;
+    margin:0 6px;
+  }
+  .spectrum-marks{
+    position:relative;
+    height:34px;
+    margin:0 6px;
+  }
+  .mark{
+    position:absolute;
+    top:0;
+    transform:translateX(-50%);
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:13px;
+    color:var(--chalk);
+  }
+  .mark::after{
+    content:"";
+    display:block;
+    width:1px;
+    height:8px;
+    background:var(--chalk-dim);
+    margin:4px auto 0;
+  }
+  .spectrum-caption{
+    display:flex;
+    justify-content:space-between;
+    font-size:11.5px;
+    color:var(--chalk-dim);
+    margin-top:2px;
+  }
+
+  /* ---------- TABLE ---------- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0 8px;
+    font-size:14.5px;
+  }
+  th, td{
+    text-align:left;
+    padding:9px 10px 9px 0;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  th{
+    color:var(--chalk-dim);
+    font-weight:600;
+    font-size:12.5px;
+  }
+  td.player{
+    color:var(--gold);
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  td.pos-badge{
+    font-family:'Fraunces', serif;
+    color:var(--chalk);
+    white-space:nowrap;
+  }
+
+  /* ---------- CALLOUT ---------- */
+  .callout{
+    border-left:3px solid var(--clay-bright);
+    padding:4px 0 4px 20px;
+    margin:18px 0;
+    color:var(--chalk);
+  }
+  .callout p{ margin:0; max-width:600px; }
+  .callout .k{ color:var(--gold); font-weight:600; }
+
+  /* ---------- LIMITATIONS ---------- */
+  .limits{ list-style:none; padding:0; margin:0; }
+  .limits li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:22px 1fr;
+    gap:12px;
+    max-width:660px;
+  }
+  .limits li:last-child{ border-bottom:none; }
+  .limits li::before{
+    content:"—";
+    color:var(--clay-bright);
+  }
+
+  footer{
+    padding:40px 0 80px;
+    color:var(--chalk-dim);
+    font-size:13px;
+  }
+  footer a{ color:var(--chalk-dim); text-decoration:underline; }
+
+  @media (max-width:600px){
+    .hero{ padding:56px 0 40px; }
+    .hero h1{ font-size:32px; }
+    .boxscore{ flex-wrap:wrap; }
+    .boxscore div{ flex:1 1 50%; border-right:none; border-bottom:1px solid var(--line); }
+    .posrow{ grid-template-columns: 36px 1fr; }
+    .posrow .legend{ grid-column: 1 / -1; }
+    .battery{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow-line"><span class="dot"></span> SCOUTING REPORT · METHODOLOGY</div>
+    <h1>If the Baseball Kingdom<br>played in <em>the Show.</em></h1>
+    <p class="lede">How this project turns 72 Mario Super Sluggers characters and their four
+    in-game ratings into projected real-life MLB positions — and why the model disagrees
+    with the obvious answer more often than you'd think.</p>
+    <div class="boxscore">
+      <div><span class="num">72</span><span class="lbl">characters rated</span></div>
+      <div><span class="num">4</span><span class="lbl">in-game stats</span></div>
+      <div><span class="num">9</span><span class="lbl">positions modeled</span></div>
+      <div><span class="num">18</span><span class="lbl">MLB comps referenced</span></div>
+    </div>
+  </div>
+
+  <!-- WHAT THIS IS -->
+  <section>
+    <span class="tag">01 — The premise</span>
+    <h2>Not "what's the highest stat" — "where would they actually play"</h2>
+    <p>Every Mario Super Sluggers character has four ratings on a 1–10 scale: Pitch, Bat,
+    Field, and Run. The obvious way to guess a position is to look at whichever number is
+    biggest. This project deliberately doesn't do that.</p>
+    <p>Instead, each character gets a weighted fit-score for all nine real defensive positions,
+    using weights built around the actual defensive spectrum scouts think in — catcher and
+    shortstop are glove-first jobs where a light bat is tolerated; first base and left field
+    are bat-first jobs where a poor glove is tolerated. The position with the highest
+    <em>eligible</em> score (see the throwing-arm rule below) becomes that character's
+    real-life projected position.</p>
+    <div class="callout">
+      <p>The point of the project is the disagreements. Mario's raw stats are highest in
+      Bat and Run — the naive read says "bat-first corner guy." The weighted model instead
+      lands him in <span class="k">Left Field</span>, because his profile balances just well
+      enough across all three offense-relevant stats that no single corner-power slot fits
+      him as cleanly. That gap between "obvious stat" and "the model's projection" is the
+      whole reason this dataset exists.</p>
+    </div>
+  </section>
+
+  <!-- SOURCE -->
+  <section>
+    <span class="tag">02 — Source &amp; attribution</span>
+    <h2>Where the numbers come from</h2>
+    <p>Character rosters and Pitch / Bat / Field / Run ratings are transcribed from the
+    Super Mario Wiki article <em>"Mario Super Sluggers,"</em> used under its Creative
+    Commons license.</p>
+    <p class="dim">Source: <a href="https://www.mariowiki.com/Mario_Super_Sluggers" target="_blank" rel="noopener">mariowiki.com/Mario_Super_Sluggers</a> — Attribution: Super Mario Wiki contributors.</p>
+  </section>
+
+  <!-- INDICES -->
+  <section>
+    <span class="tag">03 — Derived indices</span>
+    <h2>Beyond the raw four</h2>
+    <p>Three extra numbers sit alongside the raw ratings, all built from the idea that
+    real offensive and defensive value isn't a single stat in isolation:</p>
+    <ul>
+      <li><strong>Offensive Index</strong> — <code>0.75 × Bat + 0.25 × Run</code>. Speed
+      turns into extra bases and stolen bases, so it counts toward offense, just less than
+      the bat itself.</li>
+      <li><strong>Defensive Index</strong> — <code>0.70 × Field + 0.30 × Run</code>. Range
+      in the field depends on instincts and hands as much as raw speed.</li>
+      <li><strong>Athletic Index</strong> — the average of Pitch, Field, and Run. A rough
+      "tool grade" that deliberately excludes hitting, the way scouts separate the hit tool
+      from everything else.</li>
+    </ul>
+    <div class="callout">
+      <p><span class="k">A caveat worth flagging up front:</span> MSS's Bat rating is a
+      single combined offensive number — power and contact folded together — unlike real
+      scouting, which grades Hit and Power separately. Two characters with an identical
+      Bat score could be a slap hitter or a three-outcome slugger in real life, and this
+      dataset has no way to tell them apart. That's a real limitation of the translation,
+      not something the model below tries to solve.</p>
+    </div>
+  </section>
+
+  <!-- POSITION MODEL -->
+  <section>
+    <span class="tag">04 — The position-fit model</span>
+    <h2>Nine formulas, one per position</h2>
+    <p>Pitcher and Catcher are the "battery" — the only two positions where the Pitch
+    stat matters:</p>
+    <div class="battery">
+      <div class="card">
+        <span class="pos">P — Pitcher</span>
+        <code>0.85 × Pitch + 0.15 × Field</code>
+      </div>
+      <div class="card">
+        <span class="pos">C — Catcher</span>
+        <code>0.60 × Field + 0.30 × Bat + 0.10 × Pitch</code>
+      </div>
+    </div>
+    <p>The other seven positions are built entirely from Bat, Field, and Run, weighted to
+    mirror where each sits on the real defensive spectrum — from bat-first (First Base) to
+    pure-defense-and-speed (Center Field, Shortstop):</p>
+
+    <div class="keyrow">
+      <span><i class="swatch" style="background:var(--clay-bright)"></i>Bat</span>
+      <span><i class="swatch" style="background:var(--teal)"></i>Field</span>
+      <span><i class="swatch" style="background:var(--gold)"></i>Run</span>
+    </div>
+
+    <div class="posrow">
+      <span class="pos">1B</span>
+      <div class="bar"><span class="seg-bat" style="width:70%"></span><span class="seg-field" style="width:20%"></span><span class="seg-run" style="width:10%"></span></div>
+      <span class="legend">.70 / .20 / .10</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">LF</span>
+      <div class="bar"><span class="seg-bat" style="width:60%"></span><span class="seg-field" style="width:10%"></span><span class="seg-run" style="width:30%"></span></div>
+      <span class="legend">.60 / .10 / .30</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">RF</span>
+      <div class="bar"><span class="seg-bat" style="width:46%"></span><span class="seg-field" style="width:46%"></span><span class="seg-run" style="width:8%"></span></div>
+      <span class="legend">.46 / .46 / .08</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">3B</span>
+      <div class="bar"><span class="seg-bat" style="width:40%"></span><span class="seg-field" style="width:50%"></span><span class="seg-run" style="width:10%"></span></div>
+      <span class="legend">.40 / .50 / .10</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">SS</span>
+      <div class="bar"><span class="seg-bat" style="width:10%"></span><span class="seg-field" style="width:55%"></span><span class="seg-run" style="width:35%"></span></div>
+      <span class="legend">.10 / .55 / .35</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">2B</span>
+      <div class="bar"><span class="seg-bat" style="width:13%"></span><span class="seg-field" style="width:35%"></span><span class="seg-run" style="width:52%"></span></div>
+      <span class="legend">.13 / .35 / .52</span>
+    </div>
+    <div class="posrow">
+      <span class="pos">CF</span>
+      <div class="bar"><span class="seg-bat" style="width:15%"></span><span class="seg-field" style="width:30%"></span><span class="seg-run" style="width:55%"></span></div>
+      <span class="legend">.15 / .30 / .55</span>
+    </div>
+
+    <h3>Why these exact numbers</h3>
+    <p>Each position's weight vector was chosen so that it's mathematically <em>possible</em>
+    for some stat profile to make it the single best fit. An early draft had Second Base's
+    weights sitting exactly on the midpoint between First Base and Shortstop's — which meant
+    2B could never win, for any character, no matter how the raw stats came in. RF leans on
+    Field as an arm-strength stand-in almost as much as Bat, matching how real right fielders
+    are prized for their throwing arm. 2B leans on Run more than a straight "between 3B and
+    SS" blend would suggest, reflecting the classic quick, contact-and-speed middle infielder.</p>
+  </section>
+
+  <!-- THROWING ARM RULE -->
+  <section>
+    <span class="tag">05 — The throwing-arm rule</span>
+    <h2>Why this isn't just "highest score wins"</h2>
+    <p>In real baseball, left-handed throwers essentially never play Catcher, Second Base,
+    Third Base, or Shortstop — those positions are built around a right-handed release for
+    the throws across the diamond. The model enforces this directly: a character whose
+    Throwing Arm is Left has their C / 2B / 3B / SS scores set to ineligible when picking an
+    Optimal Position, even if the raw formula score there is high.</p>
+    <div class="spectrum">
+      <div class="spectrum-marks">
+        <div class="mark" style="left:8%">P</div>
+        <div class="mark" style="left:50%">1B / LF / CF / RF</div>
+        <div class="mark" style="left:92%">C · 2B · 3B · SS</div>
+      </div>
+      <div class="spectrum-track"></div>
+      <div class="spectrum-caption">
+        <span>Open to any throwing arm</span>
+        <span>Right-handed throwers only</span>
+      </div>
+    </div>
+    <p>This is why left-handed throwers like Waluigi, Bowser Jr., Boo, Funky Kong,
+    King K. Rool, and the whole Dry Bones family get pushed toward Pitcher, First Base, or
+    an outfield corner in the model — even when their raw Field rating alone looks like a
+    middle infielder's.</p>
+  </section>
+
+  <!-- MLB COMPS -->
+  <section>
+    <span class="tag">06 — MLB player comps</span>
+    <h2>Which real player does this profile resemble?</h2>
+    <p>Separate from the position model, each character also gets a "closest MLB comp" —
+    the real player whose (Pitch, Bat, Field, Run) tool profile sits nearest to theirs, by
+    straight-line distance. This is a stylized, illustrative pop-culture comparison, not a
+    scouting-grade statistical match: the reference profiles below are subjective
+    reputational estimates on the same 1–10 scale, hand-picked to give two contrasting
+    archetypes per position.</p>
+    <table>
+      <thead>
+        <tr><th>Pos</th><th>Player</th><th>Pitch</th><th>Bat</th><th>Field</th><th>Run</th><th>Archetype</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="pos-badge">P</td><td class="player">Nolan Ryan</td><td>10</td><td>2</td><td>5</td><td>3</td><td>Overpowering fastball arm</td></tr>
+        <tr><td class="pos-badge">P</td><td class="player">Greg Maddux</td><td>9</td><td>3</td><td>6</td><td>3</td><td>Command over velocity</td></tr>
+        <tr><td class="pos-badge">C</td><td class="player">Johnny Bench</td><td>2</td><td>7</td><td>9</td><td>3</td><td>Power bat behind the plate</td></tr>
+        <tr><td class="pos-badge">C</td><td class="player">Ivan Rodriguez</td><td>2</td><td>6</td><td>8</td><td>4</td><td>Athletic, plus-arm catcher</td></tr>
+        <tr><td class="pos-badge">1B</td><td class="player">Albert Pujols</td><td>2</td><td>9</td><td>6</td><td>3</td><td>Middle-of-the-order slugger</td></tr>
+        <tr><td class="pos-badge">1B</td><td class="player">Keith Hernandez</td><td>2</td><td>6</td><td>9</td><td>4</td><td>Glove-first first baseman</td></tr>
+        <tr><td class="pos-badge">2B</td><td class="player">Jackie Robinson</td><td>2</td><td>6</td><td>7</td><td>8</td><td>Contact, instincts, speed</td></tr>
+        <tr><td class="pos-badge">2B</td><td class="player">Roberto Alomar</td><td>2</td><td>7</td><td>8</td><td>6</td><td>All-around power-and-glove 2B</td></tr>
+        <tr><td class="pos-badge">3B</td><td class="player">Mike Schmidt</td><td>2</td><td>8</td><td>8</td><td>4</td><td>Power + Gold Glove hot corner</td></tr>
+        <tr><td class="pos-badge">3B</td><td class="player">George Brett</td><td>2</td><td>9</td><td>6</td><td>4</td><td>Bat-first third baseman</td></tr>
+        <tr><td class="pos-badge">SS</td><td class="player">Ozzie Smith</td><td>2</td><td>3</td><td>10</td><td>7</td><td>Defense-first shortstop</td></tr>
+        <tr><td class="pos-badge">SS</td><td class="player">Cal Ripken Jr.</td><td>2</td><td>7</td><td>7</td><td>3</td><td>Big, powerful shortstop</td></tr>
+        <tr><td class="pos-badge">LF</td><td class="player">Barry Bonds</td><td>2</td><td>9</td><td>6</td><td>5</td><td>Elite power plus speed</td></tr>
+        <tr><td class="pos-badge">LF</td><td class="player">Rickey Henderson</td><td>2</td><td>6</td><td>5</td><td>10</td><td>Speed as the carrying tool</td></tr>
+        <tr><td class="pos-badge">CF</td><td class="player">Willie Mays</td><td>2</td><td>8</td><td>9</td><td>8</td><td>The five-tool standard</td></tr>
+        <tr><td class="pos-badge">CF</td><td class="player">Ichiro Suzuki</td><td>2</td><td>7</td><td>7</td><td>9</td><td>Contact, speed, defense</td></tr>
+        <tr><td class="pos-badge">RF</td><td class="player">Hank Aaron</td><td>2</td><td>9</td><td>6</td><td>5</td><td>Sustained, quiet power</td></tr>
+        <tr><td class="pos-badge">RF</td><td class="player">Roberto Clemente</td><td>2</td><td>7</td><td>8</td><td>6</td><td>Cannon arm, all-around defense</td></tr>
+      </tbody>
+    </table>
+    <p class="dim">The workbook computes distance to all 18 reference points and reports the
+    single closest one, plus a 0–10 "Match Score." This comp is independent of the position
+    model above — a character projected to 1B by the position formula can still come back
+    closest, in raw stats, to a shortstop archetype. That's not a contradiction; it's two
+    different questions (best <em>fit</em> vs. closest overall <em>profile</em>) answered
+    two different ways.</p>
+  </section>
+
+  <!-- FINDING -->
+  <section>
+    <span class="tag">07 — A finding worth flagging</span>
+    <h2>Nobody on this roster is a real third baseman</h2>
+    <p>Even with every position mathematically reachable, only 8 of the 9 positions
+    actually get claimed as an Optimal Position across all 72 characters — no one
+    projects as a true Third Baseman, and Right Field is thin too. That's a real result
+    of the roster's stat distribution, not a modeling bug: MSS's cast skews toward pure
+    sluggers (high Bat, low everything else → 1B), pure burners (high Run → CF), and
+    pure defenders or pitchers, with very few characters combining strong Bat <em>and</em>
+    strong Field without a big Run number — exactly the profile a hot-corner third
+    baseman needs.</p>
+  </section>
+
+  <!-- LIMITATIONS -->
+  <section>
+    <span class="tag">08 — Limitations</span>
+    <h2>What this model can't tell you</h2>
+    <ul class="limits">
+      <li>Four game stats can't fully capture real baseball tools — no separate arm
+      strength rating, no Hit/Power split, no pitch type or velocity, no plate discipline.</li>
+      <li>Position weights are this project's own heuristic, built to mirror the real
+      defensive spectrum — a reasonable model, not a validated scouting formula.</li>
+      <li>"Field" stands in for both glove and arm strength. A character rated a poor
+      overall fielder could still plausibly have played an arm-driven position like
+      Right Field in reality.</li>
+      <li>The Mii's Throwing/Batting Arm varies by chosen gender in-game; this dataset
+      defaults to the right-handed (male) animation for modeling purposes.</li>
+      <li>"Character Family" and "Color Variant" groupings are judgment calls — for
+      example, the weapon-variant Bros (Hammer, Fire, Boomerang) are grouped together
+      like palette-swapped color variants, even though their difference is a weapon, not
+      just a recolor.</li>
+      <li>The MLB comps are illustrative pop-culture pairings on a hand-estimated 1–10
+      scale, not a rigorous sabermetric match to any real player's actual career stats.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Companion file: <code>mario_super_sluggers_real_life_dataset.xlsx</code> —
+    Roster Data, Position Leaderboard, and MLB Archetypes sheets, all formula-driven.</p>
+    <p>Character data © Nintendo, sourced via <a href="https://www.mariowiki.com/Mario_Super_Sluggers" target="_blank" rel="noopener">Super Mario Wiki</a> (Creative Commons). This is an unofficial fan research project.</p>
+  </footer>
+
+</div>
+</body>
+</html>
