@@ -349,7 +349,7 @@
       <div><span class="num">72</span><span class="lbl">characters rated</span></div>
       <div><span class="num">4</span><span class="lbl">in-game stats</span></div>
       <div><span class="num">9</span><span class="lbl">positions modeled</span></div>
-      <div><span class="num">18</span><span class="lbl">MLB comps referenced</span></div>
+      <div><span class="num">27</span><span class="lbl">MLB equivalents referenced</span></div>
     </div>
   </div>
 
@@ -513,14 +513,15 @@
 
   <!-- MLB COMPS -->
   <section>
-    <span class="tag">06 — MLB player comps</span>
-    <h2>Which real player does this profile resemble?</h2>
-    <p>Separate from the position model, each character also gets a "closest MLB comp" —
-    the real player whose (Pitch, Bat, Field, Run) tool profile sits nearest to theirs, by
-    straight-line distance. This is a stylized, illustrative pop-culture comparison, not a
-    scouting-grade statistical match: the reference profiles below are subjective
-    reputational estimates on the same 1–10 scale, hand-picked to give two contrasting
-    archetypes per position.</p>
+    <span class="tag">06 — MLB equivalents</span>
+    <h2>Who plays this like, in the majors?</h2>
+    <p>Each character gets an <strong>MLB Equivalent</strong> — a real player who actually
+    plays their model-assigned position, chosen by matching (Pitch, Bat, Field, Run) to the
+    closest of three reference profiles per position: a defense/speed-leaning name, a
+    bat-first name, and a modern five-tool-leaning name, mixing Hall-of-Fame-era players
+    with current stars. Because the comparison is locked to the character's own projected
+    position, the equivalent always makes sense on its face — Dixie Kong projects to
+    Shortstop and comes back Ozzie Smith, not some unrelated first baseman.</p>
     <table>
       <thead>
         <tr><th>Pos</th><th>Player</th><th>Pitch</th><th>Bat</th><th>Field</th><th>Run</th><th>Archetype</th></tr>
@@ -528,31 +529,40 @@
       <tbody>
         <tr><td class="pos-badge">P</td><td class="player">Nolan Ryan</td><td>10</td><td>2</td><td>5</td><td>3</td><td>Overpowering fastball arm</td></tr>
         <tr><td class="pos-badge">P</td><td class="player">Greg Maddux</td><td>9</td><td>3</td><td>6</td><td>3</td><td>Command over velocity</td></tr>
+        <tr><td class="pos-badge">P</td><td class="player">Jacob deGrom</td><td>9</td><td>2</td><td>5</td><td>3</td><td>Modern power-and-command ace</td></tr>
         <tr><td class="pos-badge">C</td><td class="player">Johnny Bench</td><td>2</td><td>7</td><td>9</td><td>3</td><td>Power bat behind the plate</td></tr>
         <tr><td class="pos-badge">C</td><td class="player">Ivan Rodriguez</td><td>2</td><td>6</td><td>8</td><td>4</td><td>Athletic, plus-arm catcher</td></tr>
+        <tr><td class="pos-badge">C</td><td class="player">J.T. Realmuto</td><td>2</td><td>6</td><td>8</td><td>5</td><td>Modern two-way catcher</td></tr>
         <tr><td class="pos-badge">1B</td><td class="player">Albert Pujols</td><td>2</td><td>9</td><td>6</td><td>3</td><td>Middle-of-the-order slugger</td></tr>
         <tr><td class="pos-badge">1B</td><td class="player">Keith Hernandez</td><td>2</td><td>6</td><td>9</td><td>4</td><td>Glove-first first baseman</td></tr>
+        <tr><td class="pos-badge">1B</td><td class="player">Freddie Freeman</td><td>2</td><td>8</td><td>7</td><td>4</td><td>Modern well-rounded run producer</td></tr>
         <tr><td class="pos-badge">2B</td><td class="player">Jackie Robinson</td><td>2</td><td>6</td><td>7</td><td>8</td><td>Contact, instincts, speed</td></tr>
         <tr><td class="pos-badge">2B</td><td class="player">Roberto Alomar</td><td>2</td><td>7</td><td>8</td><td>6</td><td>All-around power-and-glove 2B</td></tr>
+        <tr><td class="pos-badge">2B</td><td class="player">Jose Altuve</td><td>2</td><td>7</td><td>6</td><td>7</td><td>Modern speedy contact hitter</td></tr>
         <tr><td class="pos-badge">3B</td><td class="player">Mike Schmidt</td><td>2</td><td>8</td><td>8</td><td>4</td><td>Power + Gold Glove hot corner</td></tr>
         <tr><td class="pos-badge">3B</td><td class="player">George Brett</td><td>2</td><td>9</td><td>6</td><td>4</td><td>Bat-first third baseman</td></tr>
+        <tr><td class="pos-badge">3B</td><td class="player">Nolan Arenado</td><td>2</td><td>7</td><td>9</td><td>4</td><td>Modern glove-and-power standard</td></tr>
         <tr><td class="pos-badge">SS</td><td class="player">Ozzie Smith</td><td>2</td><td>3</td><td>10</td><td>7</td><td>Defense-first shortstop</td></tr>
         <tr><td class="pos-badge">SS</td><td class="player">Cal Ripken Jr.</td><td>2</td><td>7</td><td>7</td><td>3</td><td>Big, powerful shortstop</td></tr>
+        <tr><td class="pos-badge">SS</td><td class="player">Francisco Lindor</td><td>2</td><td>7</td><td>8</td><td>6</td><td>Modern five-tool shortstop</td></tr>
         <tr><td class="pos-badge">LF</td><td class="player">Barry Bonds</td><td>2</td><td>9</td><td>6</td><td>5</td><td>Elite power plus speed</td></tr>
         <tr><td class="pos-badge">LF</td><td class="player">Rickey Henderson</td><td>2</td><td>6</td><td>5</td><td>10</td><td>Speed as the carrying tool</td></tr>
+        <tr><td class="pos-badge">LF</td><td class="player">Juan Soto</td><td>2</td><td>9</td><td>5</td><td>4</td><td>Modern elite-bat corner outfielder</td></tr>
         <tr><td class="pos-badge">CF</td><td class="player">Willie Mays</td><td>2</td><td>8</td><td>9</td><td>8</td><td>The five-tool standard</td></tr>
         <tr><td class="pos-badge">CF</td><td class="player">Ichiro Suzuki</td><td>2</td><td>7</td><td>7</td><td>9</td><td>Contact, speed, defense</td></tr>
+        <tr><td class="pos-badge">CF</td><td class="player">Mike Trout</td><td>2</td><td>9</td><td>7</td><td>7</td><td>Modern five-tool standard</td></tr>
         <tr><td class="pos-badge">RF</td><td class="player">Hank Aaron</td><td>2</td><td>9</td><td>6</td><td>5</td><td>Sustained, quiet power</td></tr>
         <tr><td class="pos-badge">RF</td><td class="player">Roberto Clemente</td><td>2</td><td>7</td><td>8</td><td>6</td><td>Cannon arm, all-around defense</td></tr>
+        <tr><td class="pos-badge">RF</td><td class="player">Mookie Betts</td><td>2</td><td>8</td><td>8</td><td>6</td><td>Modern all-around right fielder</td></tr>
       </tbody>
     </table>
-    <p class="dim">The workbook computes distance to all 18 reference points and reports the
-    single closest one, plus a 0–10 "Match Score." This comp is independent of the position
-    model above — a character projected to 1B by the position formula can still come back
-    closest, in raw stats, to a shortstop archetype. That's not a contradiction; it's two
-    different questions (best <em>fit</em> vs. closest overall <em>profile</em>) answered
-    two different ways.</p>
+    <p class="dim">The workbook masks out every archetype that doesn't play the character's
+    own model-assigned position before finding the closest one — so "MLB Equivalent" always
+    answers "who plays this spot like they do," not "whose overall stat line looks similar
+    regardless of position." A 0–10 Equivalent Fit score comes along for how close the match
+    actually is.</p>
   </section>
+
 
   <!-- FINDING -->
   <section>
@@ -586,7 +596,7 @@
       example, the weapon-variant Bros (Hammer, Fire, Boomerang) are grouped together
       like palette-swapped color variants, even though their difference is a weapon, not
       just a recolor.</li>
-      <li>The MLB comps are illustrative pop-culture pairings on a hand-estimated 1–10
+      <li>MLB Equivalents are illustrative pop-culture pairings on a hand-estimated 1–10
       scale, not a rigorous sabermetric match to any real player's actual career stats.</li>
     </ul>
   </section>
